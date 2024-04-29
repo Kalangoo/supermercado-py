@@ -1,148 +1,71 @@
-escolha = 5
-sacola = []
-precos = {
-    1: 5.00,   # BANANA
-    2: 3.00,   # MAÇÃ
-    3: 4.00,   # BERGAMOTA
-    4: 5.00,   # UVA
-    5: 2.50,   # PÃO
-    6: 7.00,   # LEITE
-    7: 6.90,   # MEL
-    8: 10.00,  # SALAME
-    9: 9.50,   # QUEIJO
-    10: 8.50   # PRESUNTO
-}
+# lista para exibir quais produtos estão no carrinho do cliente
+carrinho_produtos = []
 
-while True:
-    print("""
-            ============ MENU ===============
-        
-        Olá, seja bem vindo ao mercadinho Seu Zé
+# função para exibir o carrinho de compras do cliente atual
+def mostrar_carrinho():
+    import compra
 
-         (Por favor, digite apenas números: )
+    print('Você adicionou os seguintes itens ao carrinho:')
+    # para cada item no carrinh_produtos, imprima-o
+    for i in carrinho_produtos:
+        print(i)
 
-        1- Começar uma compra
-        
-        2- Ir para o carrinho
+    print("\nPara finalizar o carrinho digite '0'")
+    print("Para adicionar mais itens ao carrinho digite '1'")
+    print("Para remover itens do carrinho digite '2'")
+    opcao = int(input('\nOpção desejada: '))
 
-        3- Sair
-        
-        """)
-    
-    while True:                
-        try:         
-            x = int(input("Digite aqui: "))
-            
-            if x == 1 or x == 2 or x == 3:
-                break            
-            else:
-                print("Opção inválida, por favor tente novamente")
-        except ValueError:
-            print("Opção inválida, por favor tente novamente")
+    if (opcao == 0):
+        finalizar_carrinho()
+    elif (opcao == 1):
+        compra.compra()
+    elif (opcao == 2):
+        remover_produto_carrinho()
+    else:
+        print('Comando inválido! Retornando...')
+        mostrar_carrinho()
 
-    if x == 1:  # MENU do cliente
-        while True:
-            print("""
-                ============ LISTA DE PRODUTOS ===============
-            
-            Olá cliente, o que deseja?
+# função para remover um produto do carrinho de compras do cliente atual
+def remover_produto_carrinho():
+    deseja_continuar = 's'
 
-           
-            Digite o ID do produto que deseja comprar
-                  
-                  01 - BANANA: R$ 5.00
-                  02 - MAÇÃ: R$ 3.00
-                  03 - BERGAMOTA: R$ 4.00
-                  04 - UVA: R$ 5.00
-                  05 - PÃO: R$ 2.50
-                  06 - LEITE: R$ 7.00
-                  07 - MEL: R$ 6.90
-                  08 - SALAME: R$ 10.00
-                  09 - QUEIJO: R$ 9.50
-                  10 - PRESUNTO: R$ 8.50
+    while (deseja_continuar == 's'):
+        print('\nVocê adicionou os seguintes itens: {0}'.format(carrinho_produtos))
+        produto = str(input('\nDigite o nome do produto que deseja remover: '))
+        produto.lower()
 
-                  Digite voltar digite '0'
+        if (produto in carrinho_produtos):
+            print('{0} removido com sucesso!'.format(produto))
+            carrinho_produtos.remove(produto)
 
-            """)
-            while True:
-                try:
-                    produto_id = int(input("Escolha o ID do produto: "))
-                    
-                    if produto_id == 0:
-                        break
-                    elif produto_id <= 10 and produto_id >= 1:
-                        quantidade = int(input("Escolha a quantidade do produto: "))
-                    else:
-                        print("Opção inválida, por favor tente novamente")
-                    preco_total = precos[produto_id] * quantidade
-                    sacola.append([produto_id, quantidade, preco_total])
-                except ValueError:
-                    print("Opção inválida, por favor tente novamente")
-            if produto_id == 0 or quantidade == 0:
+            deseja_continuar = str(input("Deseja remover mais algum item? Digite 'S' para confirmar e 'N' para fechar o carrinho: "))
+
+            # transforma o valor dentro de deseja_continuar para minúsculo, a fim de evitar erros de comparação
+            deseja_continuar.lower()
+
+            # verifica se deseja_continuar possui um valor diferente de 's' ou 'n', caso True, seta um valor default
+            if (deseja_continuar != 's' and deseja_continuar != 'n'):
+                print('\nComando inválido! Retornando...')
+                deseja_continuar = 's'
+
+            # se a resposta é 'n' então saia do loop
+            if (deseja_continuar == 'n'):
                 break
+        else:
+            print('{0} não encontrado! Retornando...\n'.format(produto))
 
-            
+    finalizar_carrinho() # chama finalizar_carrinho caso saia do while
 
-    if x == 2:  # MENU do carrinho
-        while True:
-            print("""
-                ============ CARRINHO ===============
-            
-            Olá colaborador, o que deseja?
+# função para finalizar a compra e reexibir o menu
+def finalizar_carrinho():
+    print('\nVocê comprou os seguintes itens: {0}\nObrigado! Retornando ao menu...\n'.format(carrinho_produtos))
+    zerar_carrinho()
+    voltar_ao_menu()
 
-            1- Verificar itens da compra
+# função para limpar os itens em carrinho_produtos
+def zerar_carrinho():
+    carrinho_produtos.clear()
 
-            2- Continuar comprando
-
-            3- Pagar e sair
-
-            """)
-
-            contador = 0
-            total_compra = 0
-            for produto in sacola:
-                print(contador, "#", produto[0], " - Quantidade:", produto[1], " - Preço total:", produto[2])
-                total_compra += produto[2]
-                contador += 1
-            print("Preço final da compra:", total_compra)
-            
-            if x == 1:
-                break
-
-            elif x == 2:
-                total_compra == 0
-                break
-                
-
-        
-
-            while True:
-                try:
-                    xf = int(input("Digite aqui: "))
-
-                    if xf == 1 or xf == 2 or xf == 3:
-                        break
-                    else:
-                        print("Opção inválida, por favor tente novamente")
-                except ValueError:
-                    print("Opção inválida, por favor tente novamente")
-            
-            if xf == 3:  # Verificação do cartão de débito
-                senha_correta = input("Digite a senha do cartão de débito: ")
-                tentativas = 3
-                while tentativas > 0:
-                    senha = input("Digite a senha novamente para confirmar: ")
-                    if senha == senha_correta:
-                        print("Pagamento efetuado com sucesso!")
-                        break
-                    else:
-                        tentativas -= 1
-                        if tentativas > 0:
-                            print("Senha incorreta! Tentativas restantes:", tentativas)
-                        else:
-                            print("Cartão bloqueado! Fim do programa.")
-                            exit()
-                break
-
-    if x == 3:  # Esse if é para sair do programa
-        break
+def voltar_ao_menu():
+    import main
+    main.mostrar_menu()
